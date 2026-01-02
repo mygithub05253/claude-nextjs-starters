@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowRight, Code2, Zap, Shield, BarChart3, Smartphone, ExternalLink } from 'lucide-react';
+import { ArrowRight, Code2, Zap, Shield, BarChart3, Smartphone, ExternalLink, Table, Layers, Grid } from 'lucide-react';
 import Link from 'next/link';
 
 /**
@@ -230,6 +230,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center">예제 및 가이드</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 컴포넌트 쇼케이스 */}
             <Link href="/components">
               <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
                 <CardHeader>
@@ -249,6 +250,7 @@ export default function Home() {
               </Card>
             </Link>
 
+            {/* 폼 예제 */}
             <Link href="/form-example">
               <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
                 <CardHeader>
@@ -263,6 +265,66 @@ export default function Home() {
                 <CardContent>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
                     실시간 유효성 검사와 에러 처리 패턴을 확인할 수 있습니다.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* 테이블 예제 */}
+            <Link href="/table-example">
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Table className="w-5 h-5" />
+                    테이블 예제
+                  </CardTitle>
+                  <CardDescription>
+                    데이터 테이블의 검색, 정렬, 필터링 기능을 배워보세요
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    shadcn/ui Table 컴포넌트를 활용한 데이터 표시 패턴을 제공합니다.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* 다이얼로그 예제 */}
+            <Link href="/dialog-example">
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Layers className="w-5 h-5" />
+                    다이얼로그 예제
+                  </CardTitle>
+                  <CardDescription>
+                    Dialog와 AlertDialog 컴포넌트의 다양한 활용법을 배워보세요
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    모달, 폼, 확인 다이얼로그 등 실무 패턴을 확인할 수 있습니다.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* 그리드 예제 */}
+            <Link href="/grid-example">
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Grid className="w-5 h-5" />
+                    그리드 예제
+                  </CardTitle>
+                  <CardDescription>
+                    반응형 카드 그리드 레이아웃과 제품 표시를 배워보세요
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    Skeleton 로딩, Hover 효과, Badge 상태 표시 등을 확인할 수 있습니다.
                   </p>
                 </CardContent>
               </Card>
