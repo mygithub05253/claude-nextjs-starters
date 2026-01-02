@@ -35,6 +35,11 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     href: '/table-example',
     icon: 'Table',
   },
+  {
+    title: '다이얼로그 예제',
+    href: '/dialog-example',
+    icon: 'Layers',
+  },
 ];
 
 /**
