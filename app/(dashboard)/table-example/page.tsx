@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ArrowUpDown, Search } from 'lucide-react';
+import { ArrowUpDown, Search, Copy, CheckCircle2 } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 /**
@@ -37,10 +37,57 @@ const users = [
 type SortKey = 'name' | 'email' | 'joinDate';
 type SortOrder = 'asc' | 'desc';
 
+// 테이블 컴포넌트 코드 예제
+const tableCodeExample = `import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+export function TableDemo() {
+  const [sortKey, setSortKey] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  // 정렬 토글 함수
+  const toggleSort = (key) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortOrder('asc');
+    }
+  };
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>이름</TableHead>
+          <TableHead>이메일</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {/* 데이터 행 */}
+      </TableBody>
+    </Table>
+  );
+}`;
+
 export default function TableExamplePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [copied, setCopied] = useState<string | null>(null);
+
+  // 코드 복사 함수
+  const copyCode = (code: string, id: string) => {
+    navigator.clipboard.writeText(code);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   // 정렬 토글 함수
   const toggleSort = (key: SortKey) => {
@@ -131,76 +178,98 @@ export default function TableExamplePage() {
           </CardContent>
         </Card>
 
-        {/* 테이블 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>사용자 목록</CardTitle>
-            <CardDescription>헤더를 클릭하여 정렬할 수 있습니다</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>
-                      <Button
-                        variant="ghost"
-                        onClick={() => toggleSort('name')}
-                        className="h-auto p-0 hover:bg-transparent hover:text-foreground"
-                      >
-                        이름
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                    <TableHead>
-                      <Button
-                        variant="ghost"
-                        onClick={() => toggleSort('email')}
-                        className="h-auto p-0 hover:bg-transparent hover:text-foreground"
-                      >
-                        이메일
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                    <TableHead>상태</TableHead>
-                    <TableHead>
-                      <Button
-                        variant="ghost"
-                        onClick={() => toggleSort('joinDate')}
-                        className="h-auto p-0 hover:bg-transparent hover:text-foreground"
-                      >
-                        가입일
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredAndSortedUsers.length > 0 ? (
-                    filteredAndSortedUsers.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.id}</TableCell>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
-                        <TableCell>{getStatusBadge(user.status)}</TableCell>
-                        <TableCell className="text-sm">
-                          {new Date(user.joinDate).toLocaleDateString('ko-KR')}
+        {/* 테이블 및 코드 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 테이블 */}
+          <Card>
+            <CardHeader>
+              <CardTitle>사용자 목록</CardTitle>
+              <CardDescription>헤더를 클릭하여 정렬할 수 있습니다</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>
+                        <Button
+                          variant="ghost"
+                          onClick={() => toggleSort('name')}
+                          className="h-auto p-0 hover:bg-transparent hover:text-foreground"
+                        >
+                          이름
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </TableHead>
+                      <TableHead>
+                        <Button
+                          variant="ghost"
+                          onClick={() => toggleSort('email')}
+                          className="h-auto p-0 hover:bg-transparent hover:text-foreground"
+                        >
+                          이메일
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </TableHead>
+                      <TableHead>상태</TableHead>
+                      <TableHead>
+                        <Button
+                          variant="ghost"
+                          onClick={() => toggleSort('joinDate')}
+                          className="h-auto p-0 hover:bg-transparent hover:text-foreground"
+                        >
+                          가입일
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredAndSortedUsers.length > 0 ? (
+                      filteredAndSortedUsers.map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="font-medium">{user.id}</TableCell>
+                          <TableCell>{user.name}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
+                          <TableCell>{getStatusBadge(user.status)}</TableCell>
+                          <TableCell className="text-sm">
+                            {new Date(user.joinDate).toLocaleDateString('ko-KR')}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                          검색 결과가 없습니다.
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                        검색 결과가 없습니다.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 코드 */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>코드</CardTitle>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => copyCode(tableCodeExample, 'table')}
+              >
+                {copied === 'table' ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <pre className="bg-slate-100 dark:bg-slate-900 p-3 rounded-md text-xs overflow-auto max-h-64">
+                <code>{tableCodeExample}</code>
+              </pre>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* 정보 카드 */}
         <Card>
