@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Copy } from 'lucide-react';
 import { useState } from 'react';
 
 /**
@@ -32,9 +32,48 @@ import { useState } from 'react';
  * Dialog와 AlertDialog의 다양한 사용 사례를 제공합니다
  */
 
+// Dialog 컴포넌트 코드 예제
+const dialogCodeExample = `import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
+export function DialogDemo() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Dialog 열기</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>제목</DialogTitle>
+          <DialogDescription>
+            설명 텍스트
+          </DialogDescription>
+        </DialogHeader>
+        <div className="py-4">
+          {/* 콘텐츠 */}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}`;
+
 export default function DialogExamplePage() {
   const [showFormMessage, setShowFormMessage] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '' });
+  const [copied, setCopied] = useState<string | null>(null);
+
+  // 코드 복사 함수
+  const copyCode = (code: string, id: string) => {
+    navigator.clipboard.writeText(code);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -233,6 +272,25 @@ export default function DialogExamplePage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* 코드 섹션 */}
+      <Card className="mt-6">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Dialog 코드 예제</CardTitle>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => copyCode(dialogCodeExample, 'dialog')}
+          >
+            {copied === 'dialog' ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <pre className="bg-slate-100 dark:bg-slate-900 p-3 rounded-md text-xs overflow-auto max-h-64">
+            <code>{dialogCodeExample}</code>
+          </pre>
+        </CardContent>
+      </Card>
 
       {/* 정보 카드 */}
       <Card className="mt-6">
