@@ -40,6 +40,11 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     href: '/dialog-example',
     icon: 'Layers',
   },
+  {
+    title: '그리드 예제',
+    href: '/grid-example',
+    icon: 'Grid',
+  },
 ];
 
 /**
