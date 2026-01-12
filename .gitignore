@@ -40,8 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Claude Code 개인 설정
-.claude/
+# Claude Code 개인 설정 (commands는 공개, 개인 설정/계획은 제외)
+.claude/settings.local.json
+.claude/plans/
 
 # MCP 서버 개인 설정
 .mcp.json
