@@ -38,3 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## 클로드 인프런 강의용 코드
 git 커밋 테스트
 동적 파라미터 수업 테스트
+동적 파라미터 코드 가져와서 수정
