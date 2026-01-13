@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { useForm, Controller } from 'react-hook-form';
@@ -187,11 +188,11 @@ export default function FormExamplePage() {
                 {/* 자기소개 */}
                 <div className="space-y-2">
                   <Label htmlFor="bio">자기소개 (선택사항)</Label>
-                  <textarea
+                  <Textarea
                     id="bio"
                     placeholder="자기소개를 입력하세요 (최대 500글자)"
-                    className="min-h-32 w-full px-3 py-2 border rounded-md border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     {...register('bio')}
+                    className={errors.bio ? 'border-red-500' : ''}
                   />
                   {errors.bio && (
                     <p className="text-sm text-red-500 flex items-center gap-1">
