@@ -1,3 +1,22 @@
+import * as React from 'react';
+
+/**
+ * 사용 가능한 Lucide 아이콘 이름 타입
+ * constants.ts의 MAIN_NAV_ITEMS에서 사용되는 아이콘으로 제한
+ */
+export type IconName =
+  | 'Home'
+  | 'Code2'
+  | 'FileText'
+  | 'Table'
+  | 'Layers'
+  | 'Grid';
+
+/**
+ * Lucide 아이콘 컴포넌트 타입
+ */
+export type LucideIcon = React.ComponentType<{ className?: string }>;
+
 /**
  * 네비게이션 메뉴 아이템 타입
  */
@@ -6,8 +25,8 @@ export interface NavItem {
   title: string;
   /** 라우트 경로 */
   href: string;
-  /** 아이콘 컴포넌트명 (lucide-react) */
-  icon?: string;
+  /** 아이콘 컴포넌트명 (lucide-react) - IconName으로 제한 */
+  icon?: IconName;
   /** 자식 메뉴 아이템 */
   items?: NavItem[];
   /** 활성 상태 */

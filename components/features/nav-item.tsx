@@ -2,13 +2,30 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { NavItem as NavItemType } from '@/types';
+import { NavItem as NavItemType, LucideIcon } from '@/types';
 import { cn } from '@/lib/utils';
 import * as Icons from 'lucide-react';
 
 interface NavItemProps extends NavItemType {
   /** 사이드바 축소 여부 */
   collapsed?: boolean;
+}
+
+/**
+ * Lucide 아이콘 컴포넌트 가져오기
+ * 타입 안전성을 위해 런타임 검증 포함
+ */
+function getIconComponent(iconName?: string): LucideIcon | null {
+  if (!iconName) return null;
+
+  const icon = Icons[iconName as keyof typeof Icons] as LucideIcon | undefined;
+
+  if (!icon) {
+    console.warn(`[NavItem] Icon "${iconName}" not found in lucide-react`);
+    return null;
+  }
+
+  return icon;
 }
 
 /**
@@ -24,10 +41,7 @@ export function NavItem({
   const pathname = usePathname();
   const isActive = pathname === href;
 
-  // lucide-react에서 아이콘 가져오기
-  const IconComponent = icon
-    ? (Icons[icon as keyof typeof Icons] as React.ComponentType<{ className?: string }>)
-    : null;
+  const IconComponent = getIconComponent(icon);
 
   return (
     <Link
@@ -39,7 +53,7 @@ export function NavItem({
           : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
         collapsed && 'justify-center'
       )}
-      title={collapsed ? title : undefined}
+      title={title}
     >
       {IconComponent && <IconComponent className="h-5 w-5 flex-shrink-0" />}
       {!collapsed && <span>{title}</span>}
