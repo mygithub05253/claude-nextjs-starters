@@ -49,3 +49,7 @@ next-env.d.ts
 
 # Windows 임시 파일
 nul
+
+# 테스트 파일
+*-test.txt
+test.txt
