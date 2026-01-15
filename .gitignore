@@ -44,12 +44,12 @@ next-env.d.ts
 .claude/settings.local.json
 .claude/plans/
 
-# MCP 서버 개인 설정
-.mcp.json
-
 # Windows 임시 파일
 nul
 
 # 테스트 파일
 *-test.txt
 test.txt
+
+# Playwright 테스트 파일
+.playwright-mcp/

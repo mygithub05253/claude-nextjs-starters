@@ -34,8 +34,15 @@ claude-nextjs-starters/
 │       ├── table-example/ # 테이블 컴포넌트 예제
 │       ├── dialog-example/# 다이얼로그 컴포넌트 예제
 │       └── grid-example/  # 그리드 레이아웃 예제
-├── components/            # shadcn/ui 기본 컴포넌트
-├── lib/                   # 유틸리티 함수
+├── components/            # 컴포넌트 라이브러리
+│   ├── ui/                # shadcn/ui 재사용 가능 컴포넌트 (원자 단위)
+│   ├── layout/            # 레이아웃 및 구조 컴포넌트
+│   └── features/          # 비즈니스 로직을 포함한 기능 컴포넌트
+├── lib/                   # 유틸리티 함수 및 상수
+├── hooks/                 # 커스텀 React 훅 (use-sidebar.ts 등)
+├── store/                 # Zustand 전역 상태 관리 (use-ui-store.ts 등)
+├── providers/             # Context Providers (theme-provider.tsx 등)
+├── types/                 # TypeScript 타입 정의 (index.ts)
 ├── node_modules/          # 의존성
 ├── public/                # 정적 자산 (이미지, 폰트 등)
 └── package.json           # 프로젝트 메타데이터 및 스크립트
@@ -45,7 +52,7 @@ claude-nextjs-starters/
 ### 핵심 기술 스택
 
 **프론트엔드:**
-- **Framework**: Next.js 16.1.1 (App Router, Server Components 우선)
+- **Framework**: Next.js 16.1.1 (App Router, Server Components 우선, React 19.2.3)
 - **UI Library**: shadcn/ui + Radix UI (접근성 기본 제공)
 - **Styling**: Tailwind CSS v4 + Tailwind Merge
 - **상태관리**: Zustand
@@ -71,6 +78,24 @@ claude-nextjs-starters/
    - `(dashboard)` 같은 괄호 표기는 라우트 그룹으로, URL에 영향을 주지 않음
    - 예: `/app/(dashboard)/form-example/page.tsx` → `http://localhost:3000/form-example`
 
+### 컴포넌트 구조 원칙
+프로젝트는 Atomic Design 원칙을 기반으로 컴포넌트를 계층적으로 구조화합니다:
+
+1. **컴포넌트/ui/** - shadcn/ui 및 Radix UI 기반 재사용 컴포넌트
+   - 개별 UI 원소 (Button, Card, Dialog, Input 등)
+   - 비즈니스 로직 없음, 스타일링 중심
+   - 예: `components/ui/button.tsx`, `components/ui/dialog.tsx`
+
+2. **컴포넌트/layout/** - 페이지 레이아웃 및 구조 컴포넌트
+   - 전체 레이아웃 구조 (AppLayout, Sidebar, Header 등)
+   - 하위 컴포넌트 조합으로 구성
+   - 예: `components/layout/app-layout.tsx`, `components/layout/sidebar.tsx`
+
+3. **컴포넌트/features/** - 기능별 비즈니스 컴포넌트
+   - 비즈니스 로직을 포함한 상위 컴포넌트 (ThemeToggle, MobileNav 등)
+   - 하나 이상의 UI 컴포넌트를 조합하여 기능 구현
+   - 예: `components/features/theme-toggle.tsx`, `components/features/user-nav.tsx`
+
 ### Tailwind CSS + shadcn/ui
 - shadcn/ui 컴포넌트는 `components/ui/` 폴더에 위치
 - Tailwind의 class 충돌 방지를 위해 `cn()` 유틸리티 사용
@@ -92,6 +117,42 @@ claude-nextjs-starters/
 ### 상태 관리 (Zustand)
 - 복잡한 전역 상태가 필요한 경우에만 사용
 - 간단한 로컬 상태는 `useState` 선호
+- 예제: `store/use-ui-store.ts` (UI 상태 관리)
+
+### Providers 패턴
+프로젝트에서는 Context API와 함께 Provider 컴포넌트를 통해 전역 설정을 관리합니다:
+
+1. **providers/ 디렉토리** - 재사용 가능한 Provider 정의
+   - `theme-provider.tsx`: next-themes 라이브러리 래퍼
+   - 테마 설정(라이트/다크 모드) 관리
+
+2. **app/layout.tsx에서 Provider 통합**
+   ```typescript
+   <ThemeProvider>
+     <Providers>
+       {children}
+     </Providers>
+   </ThemeProvider>
+   ```
+
+3. **새로운 Provider 추가 시 주의사항**
+   - 루트 레이아웃에서 필수 providers만 통합
+   - 성능 영향 고려 (과도한 provider 중첩 피하기)
+
+### 타입 정의 관리
+TypeScript 타입을 효율적으로 관리하기 위한 패턴:
+
+1. **types/ 디렉토리** - 프로젝트 전역 타입
+   - `types/index.ts`: 공용 인터페이스 및 타입 정의
+   - 여러 파일에서 사용되는 타입만 분리
+
+2. **컴포넌트별 타입** - 로컬 타입
+   - 특정 컴포넌트에서만 사용하는 타입은 해당 파일 내부에 정의
+   - 재사용성이 필요할 때만 types/ 폴더로 이동
+
+3. **tsconfig.json 경로 별칭**
+   - `@/*` 별칭으로 프로젝트 루트에서 절대 경로 지원
+   - 예: `import { cn } from '@/lib/utils'`
 
 ## 코딩 스타일
 
@@ -116,9 +177,25 @@ app/(dashboard)/my-page/page.tsx  # 페이지 컴포넌트 작성
 ```
 
 ### 새로운 컴포넌트 추가
-- shadcn/ui 재사용 가능: `components/ui/` 에서 사용
-- 프로젝트 특화: `components/custom/` 또는 각 페이지의 `components/` 폴더
-- 원자 설계(Atomic Design) 지향 또는 기능별 분리
+컴포넌트의 역할과 재사용성에 따라 적절한 폴더에 배치:
+
+1. **shadcn/ui 기본 컴포넌트**: `components/ui/`
+   - Button, Dialog, Card, Input 등 shadcn/ui 컴포넌트
+   - 커스터마이징이 필요하면 해당 폴더의 파일 수정
+
+2. **레이아웃 컴포넌트**: `components/layout/`
+   - 페이지 전체 구조를 정의하는 컴포넌트
+   - AppLayout, Sidebar, Header, Footer 등
+   - UI 컴포넌트를 조합하여 구성
+
+3. **기능 컴포넌트**: `components/features/`
+   - 비즈니스 로직을 포함한 기능 단위 컴포넌트
+   - ThemeToggle, MobileNav, UserNav 등
+   - UI 컴포넌트 및 layout 컴포넌트를 사용
+
+4. **페이지 전용 컴포넌트**: 페이지 디렉토리 내부
+   - 특정 페이지에서만 사용하는 컴포넌트
+   - 각 페이지 디렉토리 내 `components/` 폴더 생성
 
 ### 디버깅
 - 브라우저 개발자 도구의 Network/Console 탭 활용
@@ -131,4 +208,22 @@ app/(dashboard)/my-page/page.tsx  # 페이지 컴포넌트 작성
 - **이미지 최적화**: `<Image />` 컴포넌트 사용 필수
 - **번들 크기**: Vercel Analytics로 모니터링 가능
 - **배포**: Vercel 플랫폼 추천 (Next.js 최적화 제공)
+
+## MCP 서버 (Model Context Protocol)
+
+프로젝트는 Claude Code와의 통합을 위해 MCP 서버를 지원합니다.
+
+### 설정 파일
+- **위치**: `.mcp.json` - MCP 서버 설정 파일
+
+### Playwright MCP 서버
+- **명령어**: `npm run mcp:playwright`
+- **용도**: E2E 테스트, 브라우저 자동화, 스크린샷 캡처 등
+- **예시**: 페이지 상호작용 테스트, 스타일 검증 등
+
+### 새로운 MCP 서버 추가
+프로젝트에 MCP 서버를 추가할 때는:
+1. `.mcp.json` 파일에 서버 설정 추가
+2. `package.json`의 scripts에 실행 명령어 추가
+3. 해당 기능 문서화
 

@@ -50,17 +50,24 @@ export default function Home() {
       <header className="fixed w-full top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold">Next.js Starter Kit</div>
-          <nav className="hidden md:flex gap-8">
-            <a href="#features" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
-              기능
-            </a>
-            <a href="#tech-stack" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
-              기술 스택
-            </a>
-            <a href="#examples" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
-              예제
-            </a>
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex gap-8">
+              <a href="#features" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
+                기능
+              </a>
+              <a href="#tech-stack" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
+                기술 스택
+              </a>
+              <a href="#examples" className="text-slate-600 hover:text-slate-900 dark:text-slate-400">
+                예제
+              </a>
+            </nav>
+            <Link href="/login">
+              <Button variant="default" size="sm">
+                로그인
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
